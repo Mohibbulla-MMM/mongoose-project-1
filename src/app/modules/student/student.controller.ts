@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { StudentServices } from "./student.services";
-import Joi from "joi";
-import studentValidationSchema from "./student.validation";
+import studentValidationSchema from "./student.joi.validation";
+
 const createStudent = async (req: Request, res: Response) => {
   try {
     const student = req.body;
+    // -------- joi validation
     const { error, value } = studentValidationSchema.validate(student);
     if (error) {
       res.status(500).json({
@@ -12,9 +13,13 @@ const createStudent = async (req: Request, res: Response) => {
         message: "Something went wrong !",
         error: error.details,
       });
+      return;
     }
     console.log({ error }, { value });
-    const result = await StudentServices.createStudentInToDB(student);
+    // ----------- Zod validation ----------
+
+    // send data to mongodb
+    const result = await StudentServices.createStudentInToDB(value);
     res.status(200).json({
       success: true,
       message: "Student is create success!",
@@ -22,11 +27,11 @@ const createStudent = async (req: Request, res: Response) => {
     });
   } catch (err) {
     console.log(`student controller error :>- ${err}`);
-    // res.status(500).json({
-    //   success: false,
-    //   message: "Student is create faild",
-    //   error: err,
-    // });
+    res.status(500).json({
+      success: false,
+      message: "Student is create faild",
+      error: err,
+    });
   }
 };
 
