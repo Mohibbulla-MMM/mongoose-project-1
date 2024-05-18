@@ -1,13 +1,15 @@
 import { Schema, model } from "mongoose";
 import validator from "validator";
 import {
-  TstudentMethods,
+  IStudentModel,
   TGuardian,
   TLocalGuardian,
   TStudent,
-  TStudentModel,
   TUserName,
 } from "./student.interface";
+import bcrypt from "bcrypt";
+import config from "../../config";
+// import { IStudentMethods } from "./staticModel/student.static.interface";
 
 // user name schema
 const userNameSchema = new Schema<TUserName>({
@@ -88,11 +90,16 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 
 // student schema
-const studentSchema = new Schema<TStudent, TStudentModel, TstudentMethods>({
+const studentSchema = new Schema<TStudent, IStudentModel>({
   id: {
     type: String,
     required: [true, "Student ID is required"],
     unique: true,
+  },
+  password: {
+    type: String,
+    maxlength: 20,
+    required: true,
   },
   name: {
     type: userNameSchema,
@@ -154,12 +161,38 @@ const studentSchema = new Schema<TStudent, TStudentModel, TstudentMethods>({
   },
 });
 
-studentSchema.methods.isStudentExists = async function (id: string) {
-  const existingUser = await Student.findOne({ id });
-  return existingUser;
+// custom instance methods
+// studentSchema.methods.isStudentExists = async function (id: string) {
+//   const existingUser = await Student.findOne({ id });
+//   return existingUser;
+// };
+
+// ------------- custom statics  methods -----------
+// const StaticStudentSchema = new Schema<TStudent, IStudentMethods>();
+studentSchema.statics.isExistaStudent = async function (id: string) {
+  const isExists = await Student.findOne({ id });
+  return isExists;
 };
 
+// pre save middleware/hooks
+studentSchema.pre("save", async function () {
+  // console.log({ this: this }, "Pre Data save hoyar ager message");
+  // password hash
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+});
+
+// post save  middleware/hook
+studentSchema.post("save", function (doc, next) {
+  // console.log(this, "Post Data save hoyar pore message", { document });
+  // client side a password send hobe na, kintu database a save thakbe
+  doc.password = "";
+  next();
+});
+
 // student model
-const Student = model<TStudent, TStudentModel>("Student", studentSchema);
+const Student = model<TStudent, IStudentModel>("Student", studentSchema);
 
 export { Student };

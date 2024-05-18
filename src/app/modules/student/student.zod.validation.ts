@@ -57,6 +57,10 @@ const localGuardianZodSchema = z.object({
 // Student schema
 const studentZodSchema = z.object({
   id: z.string().nonempty({ message: "Student ID is required." }),
+  password: z
+    .string()
+    .nonempty({ message: "Student password is required." })
+    .max(20, "password max length 20 characters"),
   name: userNameZodSchema,
   email: z
     .string()

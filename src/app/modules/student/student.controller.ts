@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { StudentServices } from "./student.services";
 import { studentZodSchema } from "./student.zod.validation";
+ 
 
 const createStudent = async (req: Request, res: Response) => {
   try {
@@ -9,7 +10,7 @@ const createStudent = async (req: Request, res: Response) => {
 
     const studetnZodValidation = studentZodSchema.parse(student);
     // send data to mongodb
-    const result = await StudentServices.createStudentInToDB(student);
+    const result = await StudentServices.createStudentInToDB(studetnZodValidation);
 
     res.status(200).json({
       success: true,
