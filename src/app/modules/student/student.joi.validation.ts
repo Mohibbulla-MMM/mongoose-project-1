@@ -71,7 +71,7 @@ const localGuardianValidationSchema = Joi.object({
   }),
 });
 
-const studentValidationSchema = Joi.object({
+const studentJoiSchema = Joi.object({
   id: Joi.string().required().messages({
     "string.base": "Student ID must be a string",
     "string.empty": "Student ID is required",
@@ -125,4 +125,4 @@ const studentValidationSchema = Joi.object({
     }),
 });
 
-export default studentValidationSchema;
+export default studentJoiSchema;
