@@ -8,7 +8,7 @@ export type Guardian = {
 };
 
 export type UserName = {
-  fristName: string;
+  firstName: string;
   middleName: string;
   lastName: string;
 };

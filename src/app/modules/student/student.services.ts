@@ -1,18 +1,19 @@
 import { Student } from "./student.interface";
-import { StudentMolel } from "./student.model";
+import { StudentModel } from "./student.model";
+ 
 
 const createStudentInToDB = async (student: Student) => {
-  const result = await StudentMolel.create(student);
+  const result = await StudentModel.create(student);
   return result;
 };
 const getAllStudentInToDB = async () => {
-  const result = await StudentMolel.find();
+  const result = await StudentModel.find();
   return result;
 };
 
 // get single student
 const getSingleStudenFromDB = async (id: string | number) => {
-  const result = await StudentMolel.findOne({ id: id });
+  const result = await StudentModel.findOne({ id: id });
   return result;
 };
 
