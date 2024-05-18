@@ -10,16 +10,17 @@ const createStudent = async (req: Request, res: Response) => {
     const studetnZodValidation = studentZodSchema.parse(student);
     // send data to mongodb
     const result = await StudentServices.createStudentInToDB(student);
+
     res.status(200).json({
       success: true,
       message: "Student is create success!",
       data: result,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.log(`student controller error :>- ${err}`);
     res.status(500).json({
       success: false,
-      message: "Student is create faild",
+      message: err.message || "Student is create faild",
       error: err,
     });
   }
