@@ -39,6 +39,7 @@ export type TStudent = {
   localGuardian: TLocalGuardian;
   profileImage?: string;
   isActive: "active" | "inActive";
+  isDeleted: boolean;
 };
 // ----------------- custom static methods
 // export interface IStudentMethods extends Model<TStudent> {

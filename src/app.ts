@@ -8,10 +8,10 @@ app.use(cors());
 
 // single student create / student insert 
 app.use("/api/v1/student", StudentRoutes);
-// all student get
-app.use("/", StudentRoutes);
-// single student get
-app.use('/' , StudentRoutes)
+// // all student get
+// app.use("/", StudentRoutes);
+// // single student get
+// app.use('/' , StudentRoutes)
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

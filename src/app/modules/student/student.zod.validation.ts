@@ -95,6 +95,7 @@ const studentZodSchema = z.object({
       }),
     })
     .default("active"),
+  isDeleted: z.boolean().default(false),
 });
 
 export { studentZodSchema };
